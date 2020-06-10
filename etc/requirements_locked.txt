@@ -90,7 +90,7 @@ sphinx-rtd-theme==0.4.3   # via sphinx
 sphinx==3.1.0             # via -r etc/requirements_docs.in, sphinx-rtd-theme
 sqlalchemy==1.3.17        # via -r etc/requirements.in, alembic, blaze
 statsmodels==0.11.1        # via -r etc/requirements.in
-ta-lib==0.4.9             # via -r etc/requirements_talib.in
+ta-lib==0.4.18             # via -r etc/requirements_talib.in
 tables==3.4.3             # via -r etc/requirements.in
 termcolor==1.1.0          # via nose-timer
 testfixtures==6.10.1      # via -r etc/requirements_dev.in
