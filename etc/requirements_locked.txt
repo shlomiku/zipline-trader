@@ -29,7 +29,7 @@ dask[dataframe]==2.18.1   # via -r etc/requirements_blaze.in, blaze, odo
 decorator==4.4.2          # via networkx
 docutils==0.16            # via sphinx
 empyrical==0.5.3          # via -r etc/requirements.in
-enum34==1.1.6             # via flake8
+enum34==1.1.10             # via flake8
 flake8==3.6.0             # via -r etc/requirements_dev.in
 flask-cors==2.1.3         # via blaze
 flask==1.1.1              # via blaze, flask-cors
