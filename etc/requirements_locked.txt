@@ -67,7 +67,7 @@ pathtools==0.1.2          # via sphinx-autobuild, watchdog
 patsy==0.5.1              # via -r etc/requirements.in
 pbr==5.4.5                # via mock
 pip-tools==5.2.1          # via -r etc/requirements_dev.in
-port-for==0.3.1           # via sphinx-autobuild
+port-for==0.4           # via sphinx-autobuild
 psutil==5.6.7             # via blaze
 pycodestyle==2.4.0        # via flake8
 pyflakes==2.0.0           # via flake8
