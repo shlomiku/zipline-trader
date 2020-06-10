@@ -64,7 +64,7 @@ pandas-datareader==0.8.1  # via -r etc/requirements.in, empyrical
 pandas==1.0.4            # via -r etc/requirements.in, dask, empyrical, odo, pandas-datareader, trading-calendars
 partd==1.1.0              # via dask
 pathtools==0.1.2          # via sphinx-autobuild, watchdog
-patsy==0.4.0              # via -r etc/requirements.in
+patsy==0.5.1              # via -r etc/requirements.in
 pbr==4.3.0                # via mock
 pip-tools==4.5.1          # via -r etc/requirements_dev.in
 port-for==0.3.1           # via sphinx-autobuild
