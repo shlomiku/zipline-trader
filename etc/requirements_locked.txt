@@ -10,7 +10,7 @@
 alabaster==0.7.12         # via sphinx
 alembic==1.4.2            # via -r etc/requirements.in
 argh==0.26.2              # via sphinx-autobuild, watchdog
-babel==2.6.0              # via sphinx
+babel==2.8.0              # via sphinx
 backports-abc==0.5        # via tornado
 bcolz==1.2.1              # via -r etc/requirements.in
 bottleneck==1.0.0         # via -r etc/requirements.in, empyrical
