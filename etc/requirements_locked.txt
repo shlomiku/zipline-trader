@@ -100,7 +100,7 @@ trading-calendars==1.11.7  # via -r etc/requirements.in
 typing==3.7.4.1             # via python-interface
 urllib3==1.25.9           # via requests
 watchdog==0.10.2           # via sphinx-autobuild
-werkzeug==0.16.0          # via flask
+werkzeug==1.0.1          # via flask
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
