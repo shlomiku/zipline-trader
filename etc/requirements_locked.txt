@@ -80,7 +80,7 @@ pyyaml==5.3.1              # via sphinx-autobuild, watchdog
 requests-file==1.5.1      # via pandas-datareader
 requests==2.23.0          # via -r etc/requirements.in, pandas-datareader, requests-file, responses
 responses==0.10.14          # via -r etc/requirements_dev.in
-scipy==0.17.1             # via -r etc/requirements.in, empyrical
+scipy==1.4.1             # via -r etc/requirements.in, empyrical
 singledispatch==3.4.0.3   # via tornado
 six==1.11.0               # via -r etc/requirements.in, cycler, flask-cors, h5py, livereload, mock, multipledispatch, patsy, pip-tools, python-dateutil, python-interface, requests-file, responses, sphinx, tables
 snowballstemmer==1.2.1    # via sphinx
