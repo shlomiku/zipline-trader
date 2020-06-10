@@ -69,7 +69,7 @@ pbr==5.4.5                # via mock
 pip-tools==5.2.1          # via -r etc/requirements_dev.in
 port-for==0.4           # via sphinx-autobuild
 psutil==5.7.0             # via blaze
-pycodestyle==2.4.0        # via flake8
+pycodestyle==2.6.0        # via flake8
 pyflakes==2.0.0           # via flake8
 pygments==2.2.0           # via sphinx
 pyparsing==2.0.3          # via matplotlib
