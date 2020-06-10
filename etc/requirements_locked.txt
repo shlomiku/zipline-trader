@@ -86,7 +86,7 @@ six==1.15.0               # via -r etc/requirements.in, cycler, flask-cors, h5py
 snowballstemmer==2.0.0    # via sphinx
 sortedcontainers==2.2.2   # via intervaltree
 sphinx-autobuild==0.7.1   # via -r etc/requirements_docs.in
-sphinx-rtd-theme==0.4.2   # via sphinx
+sphinx-rtd-theme==0.4.3   # via sphinx
 sphinx==1.3.2             # via -r etc/requirements_docs.in, sphinx-rtd-theme
 sqlalchemy==1.3.11        # via -r etc/requirements.in, alembic, blaze
 statsmodels==0.6.1        # via -r etc/requirements.in
