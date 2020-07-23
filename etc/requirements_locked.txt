@@ -14,7 +14,7 @@ babel==2.6.0              # via sphinx
 backports-abc==0.5        # via tornado
 bcolz==1.2.1              # via -r etc/requirements.in
 bottleneck==1.0.0         # via -r etc/requirements.in, empyrical
-certifi==2018.8.24        # via requests
+certifi==2020.6.20        # via requests
 chardet==3.0.4            # via requests
 click==7.0.0              # via -r etc/requirements.in, flask, pip-tools
 cloudpickle==0.2.1        # via dask
