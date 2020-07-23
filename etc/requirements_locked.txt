@@ -82,7 +82,7 @@ requests==2.20.1          # via -r etc/requirements.in, pandas-datareader, reque
 responses==0.9.0          # via -r etc/requirements_dev.in
 scipy==0.17.1             # via -r etc/requirements.in, empyrical
 singledispatch==3.4.0.3   # via tornado
-six==1.11.0               # via -r etc/requirements.in, cycler, flask-cors, h5py, livereload, mock, multipledispatch, patsy, pip-tools, python-dateutil, python-interface, requests-file, responses, sphinx, tables
+six==1.15.0               # via -r etc/requirements.in, cycler, flask-cors, h5py, livereload, mock, multipledispatch, patsy, pip-tools, python-dateutil, python-interface, requests-file, responses, sphinx, tables
 snowballstemmer==1.2.1    # via sphinx
 sortedcontainers==2.1.0   # via intervaltree
 sphinx-autobuild==0.6.0   # via -r etc/requirements_docs.in
