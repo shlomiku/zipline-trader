@@ -52,7 +52,7 @@ matplotlib==1.5.3         # via -r etc/requirements_dev.in
 mccabe==0.6.0             # via flake8
 mock==2.0.0               # via -r etc/requirements_dev.in, responses
 multipledispatch==0.6.0   # via -r etc/requirements.in, datashape, odo
-networkx==1.9.1           # via -r etc/requirements.in, odo
+networkx==2.4           # via -r etc/requirements.in, odo
 nose-ignore-docstring==0.2  # via -r etc/requirements_dev.in
 nose-parameterized==0.5.0  # via -r etc/requirements_dev.in
 nose-timer==0.5.0         # via -r etc/requirements_dev.in
