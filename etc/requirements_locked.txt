@@ -98,7 +98,7 @@ toolz==0.8.2              # via -r etc/requirements.in, blaze, cytoolz, dask, od
 tornado==5.1.1            # via livereload, sphinx-autobuild
 trading-calendars==1.11.2  # via -r etc/requirements.in
 typing==3.6.2             # via python-interface
-urllib3==1.24.3           # via requests
+urllib3==1.25.10           # via requests
 watchdog==0.9.0           # via sphinx-autobuild
 werkzeug==0.16.0          # via flask
 
