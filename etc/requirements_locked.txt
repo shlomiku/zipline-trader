@@ -75,7 +75,7 @@ pygments==2.2.0           # via sphinx
 pyparsing==2.0.3          # via matplotlib
 python-dateutil==2.4.2    # via datashape, matplotlib, pandas
 python-interface==1.5.3   # via -r etc/requirements.in
-pytz==2018.5              # via -r etc/requirements.in, babel, matplotlib, pandas, trading-calendars
+pytz==2020.1              # via -r etc/requirements.in, babel, matplotlib, pandas, trading-calendars
 pyyaml==3.13              # via sphinx-autobuild, watchdog
 requests-file==1.4.1      # via pandas-datareader
 requests==2.20.1          # via -r etc/requirements.in, pandas-datareader, requests-file, responses
