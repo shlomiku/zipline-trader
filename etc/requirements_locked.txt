@@ -27,7 +27,7 @@ cython==0.25.2            # via -r etc/requirements_build.in
 cytoolz==0.8.2            # via -r etc/requirements_blaze.in
 dask[dataframe]==0.13.0   # via -r etc/requirements_blaze.in, blaze, odo
 decorator==4.0.0          # via networkx
-docutils==0.14            # via sphinx
+docutils==0.16            # via sphinx
 empyrical==0.5.0          # via -r etc/requirements.in
 enum34==1.1.6             # via flake8
 flake8==3.6.0             # via -r etc/requirements_dev.in
