@@ -36,7 +36,7 @@ flask==1.1.1              # via blaze, flask-cors
 funcsigs==1.0.2           # via mock, python-interface
 futures==3.2.0            # via tornado
 h5py==2.7.1               # via -r etc/requirements.in
-idna==2.7                 # via requests
+idna==2.10                 # via requests
 intervaltree==2.1.0       # via -r etc/requirements.in
 iso3166==0.9              # via -r etc/requirements.in
 iso4217==1.6.20180829     # via -r etc/requirements.in
