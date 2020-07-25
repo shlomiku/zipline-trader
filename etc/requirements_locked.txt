@@ -21,7 +21,7 @@ cloudpickle==0.2.1        # via dask
 configparser==3.5.0       # via flake8
 contextlib2==0.4.0        # via -r etc/requirements.in, blaze
 cookies==2.2.1            # via responses
-coverage==4.0.3           # via -r etc/requirements_dev.in
+coverage==5.2.1           # via -r etc/requirements_dev.in
 cycler==0.10.0            # via matplotlib
 cython==0.25.2            # via -r etc/requirements_build.in
 cytoolz==0.8.2            # via -r etc/requirements_blaze.in
