@@ -563,6 +563,19 @@ class PandasRequestsCSV(PandasCSV):
             if content_length > self.MAX_DOCUMENT_SIZE:
                 raise Exception('Document size too big.')
             if chunk:
+                if isinstance(chunk, bytes):
+                    if content_length == 0:
+                        import codecs
+                        if chunk[:3] == codecs.BOM_UTF8:
+                            encoding = 'utf-8-sig'
+                        elif chunk[:2] == codecs.BOM_UTF16_LE or chunk[:2] == codecs.BOM_UTF16_BE:
+                            encoding = 'utf-16'
+                        elif chunk[:4] == codecs.BOM_UTF32_LE or chunk[:4] == codecs.BOM_UTF32_BE:
+                            encoding = 'utf-32'
+                        else:
+                            encoding = 'utf-8'
+                        decoder = codecs.getincrementaldecoder(encoding)(errors='replace')
+                    chunk = decoder.decode(chunk)
                 content_length += len(chunk)
                 yield chunk
 
