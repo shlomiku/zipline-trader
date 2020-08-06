@@ -268,11 +268,11 @@ class ALPACABroker(Broker):
         timeframe = '1D' if is_daily else '1Min'
 
         bars_list = self._api.list_bars(symbols, timeframe, limit=500)
-        bars_map = {a.symbol: a for a in bars_list}
+        #bars_map = {a.symbol: a for a in bars_list}
         dfs = []
         for asset in assets if not assets_is_scalar else [assets]:
             symbol = asset.symbol
-            df = bars_map[symbol].df.copy()
+            df = bars_list[symbol].df.copy()
             if df.index.tz is None:
                 df.index = df.index.tz_localize(
                     'utc').tz_convert('America/New_York')
