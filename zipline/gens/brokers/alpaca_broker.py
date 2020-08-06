@@ -244,7 +244,7 @@ class ALPACABroker(Broker):
                     for quote in quotes
                 ]
 
-        bars_list = self._api.list_bars(symbols, '1Min', limit=1)
+        bars_list = self._api.get_barset(symbols, '1Min', limit=1)
         if assets_is_scalar:
             if len(bars_list) == 0:
                 return np.nan
@@ -267,7 +267,7 @@ class ALPACABroker(Broker):
             symbols = [asset.symbol for asset in assets]
         timeframe = '1D' if is_daily else '1Min'
 
-        bars_list = self._api.list_bars(symbols, timeframe, limit=500)
+        bars_list = self._api.get_barset(symbols, timeframe, limit=500)
         bars_map = {a.symbol: a for a in bars_list}
         dfs = []
         for asset in assets if not assets_is_scalar else [assets]:
