@@ -61,7 +61,7 @@ numexpr==2.6.1            # via -r etc/requirements.in, tables
 numpy==1.11.3             # via -r etc/requirements.in, -r etc/requirements_build.in, bcolz, bottleneck, dask, datashape, empyrical, h5py, matplotlib, numexpr, odo, pandas, patsy, scipy, tables, trading-calendars
 numpydoc==0.5.0           # via -r etc/requirements_docs.in
 pandas-datareader==0.2.1  # via -r etc/requirements.in, empyrical
-pandas==0.18.1            # via -r etc/requirements.in, dask, empyrical, odo, pandas-datareader, trading-calendars
+pandas==1.1.1            # via -r etc/requirements.in, dask, empyrical, odo, pandas-datareader, trading-calendars
 partd==0.3.7              # via dask
 pathtools==0.1.2          # via sphinx-autobuild, watchdog
 patsy==0.4.0              # via -r etc/requirements.in
