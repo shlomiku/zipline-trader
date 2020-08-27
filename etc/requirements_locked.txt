@@ -89,7 +89,7 @@ sphinx-autobuild==0.6.0   # via -r etc/requirements_docs.in
 sphinx-rtd-theme==0.4.2   # via sphinx
 sphinx==1.3.2             # via -r etc/requirements_docs.in, sphinx-rtd-theme
 sqlalchemy==1.3.11        # via -r etc/requirements.in, alembic, blaze
-statsmodels==0.6.1        # via -r etc/requirements.in
+statsmodels==0.12.0        # via -r etc/requirements.in
 ta-lib==0.4.9             # via -r etc/requirements_talib.in
 tables==3.4.3             # via -r etc/requirements.in
 termcolor==1.1.0          # via nose-timer
