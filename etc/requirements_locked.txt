@@ -96,7 +96,7 @@ termcolor==1.1.0          # via nose-timer
 testfixtures==6.10.1      # via -r etc/requirements_dev.in
 toolz==0.8.2              # via -r etc/requirements.in, blaze, cytoolz, dask, odo, partd, trading-calendars
 tornado==5.1.1            # via livereload, sphinx-autobuild
-trading-calendars==1.11.2  # via -r etc/requirements.in
+trading-calendars==1.11.11  # via -r etc/requirements.in
 typing==3.6.2             # via python-interface
 urllib3==1.24.3           # via requests
 watchdog==0.9.0           # via sphinx-autobuild
