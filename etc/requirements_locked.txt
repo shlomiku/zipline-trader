@@ -93,7 +93,7 @@ statsmodels==0.6.1        # via -r etc/requirements.in
 ta-lib==0.4.9             # via -r etc/requirements_talib.in
 tables==3.4.3             # via -r etc/requirements.in
 termcolor==1.1.0          # via nose-timer
-testfixtures==6.10.1      # via -r etc/requirements_dev.in
+testfixtures==6.14.2      # via -r etc/requirements_dev.in
 toolz==0.8.2              # via -r etc/requirements.in, blaze, cytoolz, dask, odo, partd, trading-calendars
 tornado==5.1.1            # via livereload, sphinx-autobuild
 trading-calendars==1.11.2  # via -r etc/requirements.in
