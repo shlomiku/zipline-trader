@@ -71,7 +71,7 @@ port-for==0.3.1           # via sphinx-autobuild
 psutil==5.6.7             # via blaze
 pycodestyle==2.4.0        # via flake8
 pyflakes==2.0.0           # via flake8
-pygments==2.2.0           # via sphinx
+pygments==2.7.1           # via sphinx
 pyparsing==2.0.3          # via matplotlib
 python-dateutil==2.4.2    # via datashape, matplotlib, pandas
 python-interface==1.5.3   # via -r etc/requirements.in
