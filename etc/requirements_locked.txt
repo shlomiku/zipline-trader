@@ -25,7 +25,7 @@ coverage==4.0.3           # via -r etc/requirements_dev.in
 cycler==0.10.0            # via matplotlib
 cython==0.25.2            # via -r etc/requirements_build.in
 cytoolz==0.8.2            # via -r etc/requirements_blaze.in
-dask[dataframe]==0.13.0   # via -r etc/requirements_blaze.in, blaze, odo
+dask[dataframe]==2.27.0   # via -r etc/requirements_blaze.in, blaze, odo
 decorator==4.0.0          # via networkx
 docutils==0.14            # via sphinx
 empyrical==0.5.0          # via -r etc/requirements.in
