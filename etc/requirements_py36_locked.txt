@@ -59,7 +59,7 @@ numpy==1.19.1             # via -r etc/requirements.in, -r etc/requirements_buil
 numpydoc==1.1.0           # via -r etc/requirements_docs.in
 packaging==20.4           # via sphinx
 pandas-datareader==0.8.1  # via -r etc/requirements.in, empyrical
-pandas==0.22.0            # via -r etc/requirements.in, dask, empyrical, odo, pandas-datareader, statsmodels, trading-calendars
+pandas==1.1.3            # via -r etc/requirements.in, dask, empyrical, odo, pandas-datareader, statsmodels, trading-calendars
 partd==1.1.0              # via dask
 pathtools==0.1.2          # via sphinx-autobuild, watchdog
 patsy==0.5.1              # via -r etc/requirements.in, statsmodels
