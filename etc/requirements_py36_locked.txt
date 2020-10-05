@@ -31,7 +31,7 @@ fsspec==0.8.0             # via dask
 h5py==2.10.0              # via -r etc/requirements.in
 idna==2.10                # via requests
 imagesize==1.2.0          # via sphinx
-importlib-metadata==1.7.0  # via flake8
+importlib-metadata==2.0.0  # via flake8
 intervaltree==3.1.0       # via -r etc/requirements.in
 iso3166==1.0.1            # via -r etc/requirements.in
 iso4217==1.6.20180829     # via -r etc/requirements.in
