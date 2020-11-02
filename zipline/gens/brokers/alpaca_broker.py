@@ -35,6 +35,7 @@ if sys.version_info > (3,):
 
 log = Logger('Alpaca Broker')
 NY = 'America/New_York'
+field_zl_to_ap = {'price': "c", 'close': "c", 'high': "h", 'low': "l",'open': "o",'volume': "v"}
 
 
 class ALPACABroker(Broker):
@@ -225,6 +226,7 @@ class ALPACABroker(Broker):
     def get_spot_value(self, assets, field, dt, data_frequency):
         assert(field in (
             'open', 'high', 'low', 'close', 'volume', 'price', 'last_traded'))
+        ap_field = field_zl_to_ap[field]
         assets_is_scalar = not isinstance(assets, (list, set, tuple))
         if assets_is_scalar:
             symbols = [assets.symbol]
@@ -251,10 +253,10 @@ class ALPACABroker(Broker):
         if assets_is_scalar:
             if len(bars_list) == 0:
                 return np.nan
-            return bars_list[0].bars[-1]._raw[field]
+            return bars_list[symbols[0]][-1]._raw[ap_field]
         bars_map = {a.symbol: a for a in bars_list}
         return [
-            bars_map[symbol].bars[-1]._raw[field]
+            bars_map[symbol].bars[-1]._raw[ap_field]
             for symbol in symbols
         ]
 
