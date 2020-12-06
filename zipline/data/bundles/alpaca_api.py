@@ -15,6 +15,9 @@ from trading_calendars import TradingCalendar
 import yaml
 from zipline.data.bundles import core as bundles
 from dateutil.parser import parse as date_parse
+
+from zipline.utils.cli import maybe_show_progress
+
 user_home = str(Path.home())
 custom_data_path = join(user_home, '.zipline/custom_data')
 
@@ -209,35 +212,45 @@ def get_aggs_from_alpaca(symbols,
     return processed
 
 MAX_PER_REQUEST_AMOUNT = 200  # Alpaca max symbols per 1 http request
-def df_generator(interval, start, end):
+def df_generator(interval, start, end, show_progress):
     exchange = 'NYSE'
     asset_list = list_assets()
     base_sid = 0
     # some symbols from alpaca are duplicated, which causes an issue with zipline
     # ingest process. for now, we make sure we serve one of them (for now the first one)
     already_ingested = {}
-    for i in range(len(asset_list[::MAX_PER_REQUEST_AMOUNT])):
-        partial = asset_list[MAX_PER_REQUEST_AMOUNT*i:MAX_PER_REQUEST_AMOUNT*(i+1)]
-        df: pd.DataFrame = get_aggs_from_alpaca(partial, start, end, 'day' if interval == '1d' else 'minute', 1)
-        for sid, symbol in enumerate(df.columns.levels[0]):
-            try:
-                # doing this makes sure not all data in df is null
-                # isnull returns 0 and 1 matrix.
-                # doing sum twice, makes sure there isn't even one NaN value
-                # and since we do ffill of the data, that should not happen
-                # if df[symbol].isnull().sum().sum() == 0:
-                if not df[symbol].isnull().all().all():
-                    if symbol not in already_ingested:
-                        first_traded = start
-                        auto_close_date = end + pd.Timedelta(days=1)
-                        yield (sid + base_sid, df[symbol].sort_index()), symbol, start, end, first_traded, auto_close_date, exchange
-                        already_ingested[symbol] = True
 
-            except Exception as e:
-                import traceback
-                traceback.print_exc()
-                print(f"error while processig {(sid + base_sid, symbol)}: {e}")
-        base_sid += MAX_PER_REQUEST_AMOUNT
+    ctx = maybe_show_progress(
+        range(len(asset_list[::MAX_PER_REQUEST_AMOUNT])),
+        show_progress=show_progress,
+        label="Obtaining data from alpaca API",
+    )
+
+    with ctx as it:
+        for i in it:
+            partial = asset_list[MAX_PER_REQUEST_AMOUNT * i:MAX_PER_REQUEST_AMOUNT * (i + 1)]
+            df: pd.DataFrame = get_aggs_from_alpaca(partial, start, end, 'day' if interval == '1d' else 'minute', 1)
+            for sid, symbol in enumerate(df.columns.levels[0]):
+                try:
+                    # doing this makes sure not all data in df is null
+                    # isnull returns 0 and 1 matrix.
+                    # doing sum twice, makes sure there isn't even one NaN value
+                    # and since we do ffill of the data, that should not happen
+                    # if df[symbol].isnull().sum().sum() == 0:
+                    if not df[symbol].isnull().all().all():
+                        if symbol not in already_ingested:
+                            first_traded = start
+                            auto_close_date = end + pd.Timedelta(days=1)
+                            yield (sid + base_sid,
+                                   df[symbol].sort_index()), symbol, start, end, first_traded, auto_close_date, exchange
+                            already_ingested[symbol] = True
+
+                except Exception as e:
+                    import traceback
+                    traceback.print_exc()
+                    print(f"error while processig {(sid + base_sid, symbol)}: {e}")
+            base_sid += MAX_PER_REQUEST_AMOUNT
+
 
 
 def metadata_df():
@@ -274,12 +287,14 @@ def api_to_bundle(interval=['1m']):
         def minute_data_generator():
             return (sid_df for (sid_df, *metadata.iloc[sid_df[0]]) in df_generator(interval='1m',
                                                                                    start=start_session,
-                                                                                   end=end_session))
+                                                                                   end=end_session,
+                                                                                   show_progress=True))
 
         def daily_data_generator():
             return (sid_df for (sid_df, *metadata.iloc[sid_df[0]]) in df_generator(interval='1d',
                                                                                    start=start_session,
-                                                                                   end=end_session))
+                                                                                   end=end_session,
+                                                                                   show_progress=True))
         for _interval in interval:
             metadata = metadata_df()
             if _interval == '1d':
