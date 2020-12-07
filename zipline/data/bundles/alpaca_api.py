@@ -92,8 +92,9 @@ def get_aggs_from_alpaca(symbols,
         """
         got_all = False
         curr = end
+        r_sum = 1
         response: pd.DataFrame = pd.DataFrame([])
-        while not got_all:
+        while not got_all and r_sum != 0 :
             if granularity == 'minute' and compression == 5:
                 timeframe = "5Min"
             elif granularity == 'minute' and compression == 15:
@@ -115,6 +116,12 @@ def get_aggs_from_alpaca(symbols,
                     delta = timedelta(days=1) if granularity == "day" \
                         else timedelta(minutes=1)
                     curr = response.index[0] - delta
+
+                # Calculate number of received bars per loop if 0 stop loop
+                r_sum = 0
+                for key in r:
+                    r_sum += len(r[key])
+
             else:
                 # no more data is available, let's return what we have
                 break
@@ -142,6 +149,7 @@ def get_aggs_from_alpaca(symbols,
         """
         only interested in samples between 9:30, 16:00 NY time
         """
+        df.index = pd.to_datetime(df.index, utc=True)
         return df.between_time("09:30", "16:00")
 
     def _drop_early_samples(df):
