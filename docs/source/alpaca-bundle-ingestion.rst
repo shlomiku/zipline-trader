@@ -8,14 +8,15 @@ Alpaca Data Bundle
 
 How To Use It
 -----------------
+| DO NOT DO:
 | Please don't use the old method of zipline ingestion. It doesn't work for this bundle, and
-  it will be abandoned. So DON'T DO THIS:
-
-.. code-block:: bash
-
-  zipline ingest -b alpaca_api
+  it will be abandoned. So DON'T DO THIS: zipline ingest -b alpaca_api
 
 | DO THIS INSTEAD:
+ .. code-block:: bash
+python alpaca_api.py
+
+  ..
 | *I currently only support daily data but free minute data will soon follow.
 | To ingest daily data bundle using the alpaca api, you need to follow these steps:
 * The bundle is defined in this file: ``zipline/data/bundles/alpaca_api.py``
