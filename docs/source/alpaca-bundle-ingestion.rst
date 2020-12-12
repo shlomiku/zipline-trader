@@ -34,7 +34,7 @@ How To Use It
 
   .. code-block:: yaml
 
-    ZIPLINE_ROOT=~/.zipline
+    ZIPLINE_ROOT: ~/.zipline
   ..
   | It means you could basically put it anywhere you want as long as you always use that as your zipline root.
 
