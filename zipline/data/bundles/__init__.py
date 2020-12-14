@@ -3,6 +3,7 @@ from . import quandl  # noqa
 from . import csvdir  # noqa
 from . import polygon_api
 from . import alpaca_api
+from . import alpha_vantage_api
 
 from .core import (
     UnknownBundle,
