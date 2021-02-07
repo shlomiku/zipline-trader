@@ -104,13 +104,11 @@ class AlphaVantage:
         you could define it in the config file or override it with env variable
         :return:
         """
-        val = None
+        val = ''
         if os.environ.get('ALPHAVANTAGE_API_KEY'):
             val = os.environ.get('ALPHAVANTAGE_API_KEY')
         elif CONFIG_PATH and self.av.get('ALPHAVANTAGE_API_KEY'):
             val = self.av.get('ALPHAVANTAGE_API_KEY')
-        if not val:
-            raise Exception("Alpha Vantage key is not set by user")
         return val
 
 

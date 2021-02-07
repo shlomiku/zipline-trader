@@ -16,7 +16,6 @@ Adjustments: to enable a bigger precision on our backtests, i decided to
   for dividends and splits. However, only daily-data contains this information
   so it's really IMPORTANT that you never only request minute-data alone.
 """
-
 import numpy as np
 import pandas as pd
 
@@ -29,6 +28,7 @@ from ratelimit import limits, sleep_and_retry
 
 import config
 from zipline.data.bundles import core as bundles
+from zipline.data.bundles.common import asset_to_sid_map
 from zipline.data.bundles.universe import Universe, get_sp500, get_sp100, get_nasdaq100, all_alpaca_assets
 
 from zipline.data import bundles as bundles_module
@@ -370,27 +370,6 @@ def api_to_bundle(interval=['1m']):
         print(metadata)
 
     return ingest
-
-
-def asset_to_sid_map(asset_finder, symbols):
-    assets_to_sids = {}
-
-    if asset_finder:
-        next_free_sid = asset_finder.get_max_sid() + 1
-        for symbol in symbols:
-            try:
-                asset = asset_finder.lookup_symbol(symbol, pd.Timestamp(date.today(), tz='UTC'))
-                assets_to_sids[symbol] = int(asset)
-            except (SymbolNotFound, SidsNotFound) as e:
-                assets_to_sids[symbol] = next_free_sid
-                next_free_sid = next_free_sid + 1
-
-        return assets_to_sids
-
-    for i in range(len(symbols)):
-        assets_to_sids[symbols[i]] = i
-
-    return assets_to_sids
 
 
 if __name__ == '__main__':

@@ -12,6 +12,7 @@ from trading_calendars import TradingCalendar
 
 import config
 from zipline.data.bundles import core as bundles
+from zipline.data.bundles.common import asset_to_sid_map
 from zipline.data.bundles.universe import Universe, all_alpaca_assets, get_sp500, get_sp100, get_nasdaq100
 from dateutil.parser import parse as date_parse
 from zipline.errors import SymbolNotFound, SidsNotFound
@@ -60,24 +61,6 @@ def list_assets():
             ASSETS = list(set(ASSETS))
     return ASSETS
 
-def asset_to_sid_map(asset_finder, symbols):
-    assets_to_sids = {}
-
-    if asset_finder:
-        next_free_sid = asset_finder.get_max_sid() + 1
-        for symbol in symbols:
-            try:
-                asset = asset_finder.lookup_symbol(symbol, pd.Timestamp(date.today(), tz='UTC'))
-                assets_to_sids[symbol] = int(asset)
-            except (SymbolNotFound, SidsNotFound) as e:
-                assets_to_sids[symbol] = next_free_sid
-                next_free_sid = next_free_sid + 1
-
-        return assets_to_sids
-
-    for i in range(len(symbols)):
-        assets_to_sids[symbols[i]] = i
-    return assets_to_sids
 
 def iso_date(date_str):
     """

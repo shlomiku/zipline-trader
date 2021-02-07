@@ -10,12 +10,9 @@ from pandas import DataFrame, read_csv, Index, Timedelta, NaT
 from trading_calendars import register_calendar_alias
 
 from zipline.utils.cli import maybe_show_progress
-from zipline.errors import SymbolNotFound, SidsNotFound
 
-from datetime import date
-import pandas as pd
-
-from . import core as bundles
+from zipline.data.bundles import core as bundles
+from zipline.data.bundles.common import asset_to_sid_map
 
 handler = StreamHandler(sys.stdout, format_string=" | {record.message}")
 logger = Logger(__name__)
@@ -173,25 +170,6 @@ def csvdir_bundle(environ,
         adjustment_writer.write(splits=divs_splits['splits'],
                                 dividends=divs_splits['divs'])
 
-def asset_to_sid_map(asset_finder, symbols):
-    assets_to_sids = {}
-
-    if asset_finder:
-        next_free_sid = asset_finder.get_max_sid() + 1
-        for symbol in symbols:
-            try:
-                asset = asset_finder.lookup_symbol(symbol, pd.Timestamp(date.today(), tz='UTC'))
-                assets_to_sids[symbol] = int(asset)
-            except (SymbolNotFound, SidsNotFound) as e:
-                assets_to_sids[symbol] = next_free_sid
-                next_free_sid = next_free_sid + 1
-
-        return assets_to_sids
-
-    for i in range(len(symbols)):
-        assets_to_sids[symbols[i]] = i
-
-    return assets_to_sids
 
 def _pricing_iter(csvdir, symbols, metadata, divs_splits, show_progress, assets_to_sids={}):
     with maybe_show_progress(symbols, show_progress,

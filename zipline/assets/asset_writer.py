@@ -806,26 +806,35 @@ class AssetDBWriter(object):
         for column, dtype in df.dtypes.iteritems():
             if dtype.kind == 'M':
                 df[column] = _dt_to_epoch_ns(df[column])
+        try:
+            df.to_sql(
+                tbl.name,
+                txn.connection,
+                index=True,
+                index_label=first(tbl.primary_key.columns).name,
+                if_exists='append',
+                chunksize=chunk_size,
+            )
+        except:
+            df.reset_index(inplace=True)
 
-        df.reset_index(inplace=True)
+            for i, row in df.iterrows():
+                values = {}
 
-        for i, row in df.iterrows():
-            values = {}
+                for column in list(df.columns):
+                    # skip raw index, get set by backend
+                    if column == 'index':
+                        continue
+                    values[column] = row[column]
 
-            for column in list(df.columns):
-                # skip raw index, get set by backend
-                if column == 'index':
-                    continue
-                values[column] = row[column]
-
-            try:
-                ins = tbl.insert().values(values)
-                txn.execute(ins)
-            except IntegrityError:
-                pkey_column = first(tbl.primary_key.columns)
-                upd = tbl.update().where(pkey_column == values[pkey_column.name]).values(values)
-                txn.execute(upd)
-                #print(f'Skipping duplicate for table {tbl.name}: {values}')
+                try:
+                    ins = tbl.insert().values(values)
+                    txn.execute(ins)
+                except IntegrityError:
+                    pkey_column = first(tbl.primary_key.columns)
+                    upd = tbl.update().where(pkey_column == values[pkey_column.name]).values(values)
+                    txn.execute(upd)
+                    # print(f'Skipping duplicate for table {tbl.name}: {values}')
 
     def _write_assets(self,
                       asset_type,

@@ -12,7 +12,7 @@ def db_backend_configured():
     if CONFIG_PATH:
         return ZIPLINE_CONFIG["backend"].get("type", False)
     else:
-        return os.environ.get('ZIPLINE_DATA_BACKEND_HOST')
+        return os.environ.get('ZIPLINE_DATA_BACKEND')
 
 
 class PostgresDB:
