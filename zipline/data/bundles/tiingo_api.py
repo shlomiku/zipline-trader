@@ -15,6 +15,7 @@ from zipline.data.bundles.universe import get_sp500, get_sp100, get_nasdaq100
 from zipline.data.bundles.core import register
 from zipline.data import bundles as bundles_module
 
+
 from datetime import date, timedelta
 import pandas as pd
 
@@ -22,6 +23,7 @@ from trading_calendars import TradingCalendar
 import trading_calendars
 
 from tiingo import TiingoClient
+from tiingo.restclient import RestClientError
 
 import time
 
@@ -47,17 +49,25 @@ def tiingo_bundle(environ,
                   cache,
                   show_progress,
                   output_dir,
-                  tframes=None,
-                  csvdir=None):
+                  fundamentals_writer=None):
     """
     Build a zipline data bundle from the tiing-api
     """
     init_client()
 
-    assets = get_nasdaq100()
-    #assets = ['AAPL', 'TSLA']
-    assets = 'ALL'
+    assets = get_sp500()
+    #assets = get_nasdaq100()
+
+    #assets = ['AAPL']
+    assets = assets + ['SPY']
+    #assets = ['AAPL', 'TSLA', 'GOOGL', 'SPY']
+    #assets = 'ALL'
+
     metadata, assets_to_sids = tiingo_metadata(assets, asset_db_writer.asset_finder)
+
+    print('Writing assets...')
+    asset_db_writer.write(equities=metadata)
+    print('Done!')
 
     divs_splits = {'divs': DataFrame(columns=['sid', 'amount',
                                               'ex_date', 'record_date',
@@ -69,14 +79,11 @@ def tiingo_bundle(environ,
     sids_written = []
 
     daily_bar_writer.write(
-        _pricing_iter(symbols, divs_splits, show_progress, 
+        _pricing_iter(symbols, divs_splits, show_progress,
                       metadata, sids_written, assets_to_sids = assets_to_sids),
     )
 
-    metadata = metadata[metadata.index.isin(sids_written)]
-    print('Writing assets...')
-    asset_db_writer.write(equities=metadata)
-    print('Done!')
+    #metadata = metadata[metadata.index.isin(sids_written)]
 
     divs_splits['divs']['sid'] = divs_splits['divs']['sid'].astype(int)
     divs_splits['splits']['sid'] = divs_splits['splits']['sid'].astype(int)
@@ -85,6 +92,13 @@ def tiingo_bundle(environ,
     adjustment_writer.write(splits=divs_splits['splits'],
                             dividends=divs_splits['divs'])
     print('Done!')
+
+    if fundamentals_writer:
+        print('Writing fundamentals...')
+        fundamentals_writer.write(
+            _fundamentals_iter(assets_to_sids)
+        )
+        print('Done!')
 
 def asset_to_sid_map(asset_finder, symbols):
     assets_to_sids = {}
@@ -109,13 +123,17 @@ def asset_to_sid_map(asset_finder, symbols):
 def tiingo_metadata(tickers='ALL', asset_finder=None):
     tickers_df = pd.DataFrame(CLIENT.list_stock_tickers())
 
-    tickers_df = tickers_df.loc[
-        (tickers_df['exchange'].isin(['NYSE', 'NASDAQ'])) &
-        (tickers_df['assetType'] == 'Stock')
-    ]
+    tickers_df.to_csv('/tmp/tickers.csv')
 
-    if tickers != 'ALL':
+    not_found = set()
+    if tickers == 'ALL':
+        tickers_df = tickers_df.loc[
+            (tickers_df['exchange'].isin(['NYSE', 'NASDAQ'])) &
+            (tickers_df['assetType'] == 'Stock')
+        ]
+    else :
         tickers_df = tickers_df.loc[tickers_df['ticker'].isin(tickers)]
+        not_found = set(tickers) - set(tickers_df['ticker']) 
 
     tickers_df['startDate'] = pd.to_datetime(tickers_df['startDate'])
     tickers_df['endDate'] = pd.to_datetime(tickers_df['endDate'])
@@ -130,22 +148,26 @@ def tiingo_metadata(tickers='ALL', asset_finder=None):
 
     tickers_df.drop(columns=['assetType', 'priceCurrency'], inplace=True)
 
-    ex_duplicates = []
-    with maybe_show_progress(duplicates['ticker'], True,
+    to_query = duplicates['ticker'].values.tolist() + list(not_found)
+    
+    new_tickers = []
+    with maybe_show_progress(to_query, True,
             item_show_func=lambda e: e if e is None else str(e),
             label='Retrieving metadata for duplicate tickers: ') as it:
 
         for ticker in it:
-            ex_duplicate = {}
-            ticker_meta = CLIENT.get_ticker_metadata(ticker)
-            ex_duplicate['ticker'] = ticker_meta['ticker']
-            ex_duplicate['exchange'] = ticker_meta['exchangeCode']
-            ex_duplicate['startDate'] = pd.to_datetime(ticker_meta['startDate'])
-            ex_duplicate['endDate'] = pd.to_datetime(ticker_meta['endDate'])
-            ex_duplicates.append(ex_duplicate)
+            try:
+                new_ticker = {}
+                ticker_meta = CLIENT.get_ticker_metadata(ticker)
+                new_ticker['ticker'] = ticker_meta['ticker']
+                new_ticker['exchange'] = ticker_meta['exchangeCode']
+                new_ticker['startDate'] = pd.to_datetime(ticker_meta['startDate'])
+                new_ticker['endDate'] = pd.to_datetime(ticker_meta['endDate'])
+                new_tickers.append(new_ticker)
+            except RestClientError:
+                print(f'Warning no metadata for {ticker}, skipping...')
 
-
-    tickers_df = pd.concat([tickers_df, pd.DataFrame(ex_duplicates)])
+    tickers_df = pd.concat([tickers_df, pd.DataFrame(new_tickers)])
 
     tickers_df.dropna(inplace=True)
     tickers_df.reset_index(inplace=True)
@@ -243,9 +265,67 @@ def _pricing_iter(symbols, divs_splits, show_progress, metadata, sids_written, a
             except Exception as e:
                 print(f'\nException for symbol {symbol}')
                 print(e)
-            
+
             sids_written.append(sid)
             yield sid, df
+
+def _fundamentals_iter(assets_to_sids):
+    with maybe_show_progress(assets_to_sids.items(), True,
+            item_show_func=lambda e: e if e is None else str(e),
+            label='Loading fundamental-data for: ') as it:
+
+          for symbol, sid in it:
+              f_daily = CLIENT.get_fundamentals_daily(symbol)
+              f_statements = CLIENT.get_fundamentals_statements(symbol, asReported=True)
+              
+              statements_data = []
+              for sheet in f_statements:
+                  sheet_date = pd.to_datetime(sheet['date'], utc=True)
+                  for section, data in sheet['statementData'].items():
+                      statement_df = pd.DataFrame(data)
+                      statement_df['date'] = sheet_date
+
+                      # append an artifical row to be able to determine from which statement
+                      # the data came from
+                      statementDateField = pd.DataFrame([
+                          {'dataCode':'statementDate', 'value':int(sheet_date.to_datetime64()), 'date':sheet_date}])
+
+                      statement_df = statement_df.append(statementDateField, ignore_index=True)
+                      statements_data.append(statement_df)
+
+              if statements_data:
+                  statements_data = pd.concat(statements_data)
+                  statements_data.rename(columns={'dataCode': 'name'}, inplace=True)
+                  statements_data.set_index(['date', 'name'], inplace=True)
+                  
+                  # some data is available from different sections and so duplicated
+                  statements_data = statements_data.loc[~statements_data.index.duplicated()]
+                  statements_data = statements_data.unstack()
+                  statements_data.columns = statements_data.columns.droplevel(0)
+              else:
+                  statements_data = pd.DataFrame()
+
+              if f_daily:
+                  daily_data = pd.DataFrame(f_daily)
+                  daily_data['date'] = pd.to_datetime(daily_data['date'])
+                  daily_data.set_index('date', inplace=True)
+              else: 
+                  daily_data = pd.DataFrame()
+
+              pd.concat([pd.DataFrame(), pd.DataFrame()])
+
+              df = pd.concat([daily_data, statements_data])
+
+              if df.empty:
+                  print(f'\nNo data for {symbol}, skipping...')
+                  continue
+
+              df = df.stack().reset_index(name='value')
+              df['id'] = sid
+              df.rename(columns={'level_1': 'name'}, inplace=True)
+
+              yield df
+
 
 def fill_daily_gaps(df):
     """
@@ -292,11 +372,11 @@ def drop_extra_sessions(df):
 
     if len(df.index) == len(sessions):
         return df
-    
+
     to_drop = df.index.difference(sessions)
     if len(to_drop) == 0:
         return df
-    
+
     df.drop(to_drop, inplace=True)
 
     dropped = len(to_drop)
