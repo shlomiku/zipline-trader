@@ -39,4 +39,4 @@ The original zipline tutorial:
 .. include:: beginner-tutorial.rst
 
 
-.. _`source-code` : https://github.com/shlomikushchi/zipline-trader
+.. _`source-code` : https://github.com/gwhk/zipline-trader

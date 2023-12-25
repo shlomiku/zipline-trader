@@ -11,7 +11,7 @@ zipline-trader is based on previous projects and work:
 
 - `zipline <https://github.com/quantopian/zipline>`_ project.
 - `zipline-live <http://www.zipline-live.io>`_ project.
-- `zipline-live2 <https://github.com/shlomikushchi/zipline-live2>`_ project.
+- `zipline-live2 <https://github.com/gwhk/zipline-live2>`_ project.
 
 zipline-live and zipline-live2 are past iterations of this project and this is the up to date project.
 
@@ -51,6 +51,6 @@ Currently 2 brokers are supported:
  * IB
 
 
-.. _`zipline-trader` : https://github.com/shlomikushchi/zipline-trader
+.. _`zipline-trader` : https://github.com/gwhk/zipline-trader
 .. _`playlist` : https://youtu.be/gsUnCjl5mrg
 .. _`@atarax` : https://github.com/atarax/

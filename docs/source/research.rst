@@ -72,7 +72,7 @@ Factors and Alphalens
 
  .. code-block:: sh
 
-    pip install git+https://github.com/shlomikushchi/alphalens#egg=alphalens
+    pip install git+https://github.com/gwhk/alphalens#egg=alphalens
 
 Sector Classifier
 )))))))))))))))))))))
